@@ -1,6 +1,5 @@
 #include <stdio.h>
-#include <math.h>
-#include "tools.h"
+#include <assert.h>
 
 /* 用算术右移完成逻辑右移 */
 unsigned srl(unsigned x, int k)
@@ -12,19 +11,9 @@ unsigned srl(unsigned x, int k)
     */
 
     int w = 8 * sizeof(int); /* int的总位数 */
-    int m = pow(2, w-k);
+    int mask = -1 << (w-k); /* k个1 + w-k个 0*/
 
-    /* 最高位不是1 则不需要转换 */
-    if(x < pow(2,w-1))
-    {
-        return xsra;
-    }
-    else
-    {
-        /* 利用溢出 归零多余的位 */
-        return (xsra + m);
-    }
-
+    return xsra & ~mask;
 }
 
 /* 用逻辑右移来完成算术右移 */
@@ -33,33 +22,23 @@ int sra(int x, int k)
     int xsrl = (unsigned) x >> k;
 
     int w = 8 * sizeof(int); /* int的总位数 */
-    int m = pow(2, w-k);
+    int mask = -1 << (w-k);
 
-    if(x * xsrl >= 0)
-    {
-        return xsrl;
-    }
-    else
-    {
-        /* 加上少加的位 即-m*/
-        return (xsrl - m);
-    }
+    int m = 1 << (w - 1);
+
+    /* 如果x最高位为 1  则mask&-1 保持不变 否则 mask&0 变为全0*/
+    mask &= !(x & m) - 1;
+
+    return xsrl | mask;
 }
 
 int main()
 {
-    int x;
-    int k;
-    unsigned val1;
-    int val2;
-    printf("Please input x, k\n");
-    scanf("%d%d", &x, &k);
-    val1 = srl((unsigned)x, k);
-    val2 = sra(x, k);
+    unsigned test_unsigned = 0x12345678;
+    int test_int = 0x12345678;
 
-    show_int(x);
-    show_unsigned(val1);
-    show_int(val2);
+    assert(srl(test_unsigned, 3) == test_unsigned >> 3);
+    assert(sra(test_int, 3) == test_int >> 3);
 
     return 0;
 }
