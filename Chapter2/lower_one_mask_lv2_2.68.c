@@ -3,7 +3,7 @@
 
 int lower_one_mask(int n)
 {
-    int x = 1 << n;
+    int x = 1 << n - 1 << 1;
 
     return (x - 1);
 }
