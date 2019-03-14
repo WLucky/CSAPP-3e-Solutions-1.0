@@ -25,7 +25,7 @@ int main(int argc, char *argv[])
 
     for (int i = 0; i < ele_num; i++)
     {
-        printf("%.2u  :   %.6lf\n", array_y[i].Y, bin_series(array_y[i].Y, array_y[i].k));
+        printf("%.2u:%.6lf\n", array_y[i].Y, bin_series(array_y[i].Y, array_y[i].k));
     }
 
     return 0;
