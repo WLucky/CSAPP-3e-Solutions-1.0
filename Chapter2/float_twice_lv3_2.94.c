@@ -1,6 +1,4 @@
 #include <assert.h>
-#include <stdio.h>
-#include "tools.h"
 
 typedef unsigned float_bits;
 
@@ -60,7 +58,7 @@ int main(int argc, char *argv[])
 {
     float x;
     float twice_x;
-    int count = 0;
+
     for(unsigned i = 0; i < (unsigned)(-1); i++)
     {
         x = *(float *)&i;
