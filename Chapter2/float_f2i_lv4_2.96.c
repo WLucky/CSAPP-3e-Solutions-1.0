@@ -20,12 +20,6 @@ int float_f2i(float_bits f)
     int E;
     int add_f;
 
-    /* 无穷或者NaN */
-    if (exp == 0xFF)
-    {
-        return int_min;
-    }
-
     if (exp < 127)
     {
         /* E < 0 include denormalized*/
@@ -79,23 +73,7 @@ int main(int argc, char *argv[])
         x = *(float *)&i;
         f2i_x = (int)x;
 
-        if (float_f2i(i) != f2i_x)
-        {
-            printf("\nNo.%d\n", count++);
-
-            int y = float_f2i(i);
-
-            show_unsigned(i);
-            show_unsigned(y);
-            show_unsigned(f2i_x);
-
-            if (count == 10)
-            {
-                return 0;
-            }
-        }
-
-        /*assert(float_f2i(i) == *(float_bits *)&half_x);*/
+        assert(float_f2i(i) == f2i_x);
     }
 
     return 0;
