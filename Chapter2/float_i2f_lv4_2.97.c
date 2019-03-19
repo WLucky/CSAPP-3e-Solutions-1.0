@@ -69,16 +69,22 @@ float_bits float_i2f(int i)
         }
         else
         {
-            
-            frac = M >> (E - 23); 
+            int offset = E - 23;
+            int round_part = M & ((1 << offset) - 1);
+            int round_mid = 1<<(offset - 1);
+            frac = M >> offset; 
+
             /* 向偶数对齐 如果是中间值 且frac末位为1 则+1 */
-            if((M - (frac << (E - 23))) > (1<<(E - 24)))
+            if(round_part > round_mid)
             {
                 frac += 1;
             }
-            else if(((M >> (E - 24)) & 0x3) == 0x3)
+            else if(round_part == round_mid)
             {
-                frac += 1;
+                if((frac & 0x1) == 1)
+                {
+                    frac += 1;                   
+                }
             }
 
             /* 如果frac+1后溢出 则exp +1, frac = 0*/
@@ -103,24 +109,7 @@ int main(int argc, char *argv[])
     {
         i2f_x = (float)i;
 
-        if (float_i2f(i) != *(float_bits *)&i2f_x)
-        {
-            printf("\nNo.%d\n", count++);
-
-            float_bits y = float_i2f(i);
-
-            show_unsigned(i);
-            show_unsigned(*(unsigned *)&y);
-            show_unsigned(*(unsigned *)&i2f_x);
-            printf("int_val: %d\nmy: %f\nright: %f\n", i, *(float *)&y, i2f_x);
-
-            if (count == 10)
-            {
-                return 0;
-            }
-        }
-
-        // assert(float_i2f(i) == *(float_bits *)&i2f_x);
+        assert(float_i2f(i) == *(float_bits *)&i2f_x);
     }
 
     return 0;
