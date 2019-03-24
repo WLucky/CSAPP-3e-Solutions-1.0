@@ -1,0 +1,37 @@
+x = 2^64 * xh + xl
+y = 2^64 * yh + yl
+
+x*y = xl*yl + (xh * yl + yh * xl)*2^64 + (...)2^128 最后部分溢出可忽略
+
+p = 2^64 * ph + pl
+
+pl = xl mulq yl (low64bit)
+ph = (xh imulq yl + yh imulq xl) + xl mulq yl (high64bit)  (imulq也可以用mulq  因为补码乘法的低位运算是等价的)
+
+-----------------------------------------------------------------------------------------
+以上解答可对应到汇编代码中
+
+	movq	%rsi, %rax //
+	movq	%rdx, %rsi
+	movq	%rdx, %rcx
+	sarq	$63, %rcx
+	cqto
+	imulq	%rsi, %rdx
+	imulq	%rax, %rcx
+	addq	%rdx, %rcx
+	mulq	%rsi
+	addq	%rcx, %rdx
+	movq	%rax, (%rdi)
+	movq	%rdx, 8(%rdi)
+	ret
+
+---------------------------------------------------------------------------------------------
+
+疑问：
+
+为何直接使用imulq，如下
+movq 	%rsi, %rax
+imulq 	%rdx
+movq 	%rax, (%rdi)
+movq 	%rdx, 8(%rdi)
+ret
