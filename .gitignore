@@ -4,3 +4,4 @@
 .*
 # ееЁЩ .gitignore ╠╬иМ
 !/.gitignore
+*.s
