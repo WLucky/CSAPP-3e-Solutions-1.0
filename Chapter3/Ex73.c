@@ -24,7 +24,6 @@ range_t find_range(float x)
         ".P:\n\t"
         "movl $3,%eax\n\t"
         ".Done:\n\t"
-        "rep ret\n\t"
     );
 }
 
@@ -51,13 +50,18 @@ range_t find_range_C(float x)
 
 int main(int argc, char *argv[])
 {
+    long long count = 0;
     for(unsigned i = 0; i < (unsigned)(-1); i++)
     {
+        count++;
         float f = *(float*)&i;
         if(find_range(f) != find_range_C(f))
 		{
-			printf("err float %f first %d second %d", f, find_range(f), find_range_C(f));
+			printf("err float %f first %d second %d\n", f, find_range(f), find_range_C(f));
 			break;
 		}
     }
+
+    printf("test count %lld sizeof long %d\n", count, sizeof(long long));
+    return 0;
 }
