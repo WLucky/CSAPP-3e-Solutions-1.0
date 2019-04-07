@@ -62,6 +62,6 @@ int main(int argc, char *argv[])
 		}
     }
 
-    printf("test count %lld sizeof long %d\n", count, sizeof(long long));
+    printf("test count %lld sizeof long %lu\n", count, sizeof(long long));
     return 0;
 }
