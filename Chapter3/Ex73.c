@@ -1,4 +1,5 @@
-#include<assert.h>
+#include <assert.h>
+#include <stdio.h>
 
 typedef enum {NEG, ZERO, POS, OTHER} range_t;
 
@@ -7,7 +8,7 @@ range_t find_range(float x)
     __asm__(
         "vxorps %xmm1, %xmm1, %xmm1\n\t"
         "vucomiss %xmm1, %xmm0\n\t"
-        "jp .p\n\t"
+        "jp .P\n\t"
         "ja .A\n\t"
         "jb .B\n\t"
         "je .E\n\t"
@@ -23,7 +24,7 @@ range_t find_range(float x)
         ".P:\n\t"
         "movl $3,%eax\n\t"
         ".Done:\n\t"
-        "ret\n\t"
+        "rep ret\n\t"
     );
 }
 
@@ -53,6 +54,10 @@ int main(int argc, char *argv[])
     for(unsigned i = 0; i < (unsigned)(-1); i++)
     {
         float f = *(float*)&i;
-        assert(find_range(f) == find_range_C(f));
+        if(find_range(f) != find_range_C(f))
+		{
+			printf("err float %f first %d second %d", f, find_range(f), find_range_C(f));
+			break;
+		}
     }
 }
