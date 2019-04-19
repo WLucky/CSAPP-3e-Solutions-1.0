@@ -4,6 +4,8 @@ Every ex has a test procedure.
 
 the 2th Chapter has fisnished.
 
-Welcome to communicate with me with questions.
+Chapter3 finished --4/7/2019
+
+Welcome to communicate with me for questions.
 
 
